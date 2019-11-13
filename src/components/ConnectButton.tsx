@@ -1,24 +1,31 @@
-import React, { FC, useCallback, useEffect } from 'react'
-import Button from '@material-ui/core/Button'
+import React, { FC, useCallback } from 'react'
+import Button from '@material-ui/core/Fab'
 import { usePort } from './Serial'
 
 const ConnectButton: FC = () => {
   const [port, setPort] = usePort()
   const onClick = useCallback(() => {
-    navigator.serial
-      .requestPort({})
-      .then(port => {
-        console.log('port!', port)
-        setPort(port)
-      })
-      .catch(e => console.error(e))
-  }, [])
+    if (!port) {
+      navigator.serial
+        .requestPort({})
+        .then(port => {
+          console.log('port!', port)
+          setPort(port)
+        })
+        .catch(e => console.error(e))
+    }
+  }, [Boolean(port)])
 
-  return port ? (
-    <Button disabled>Connected</Button>
-  ) : (
-    <Button variant="contained" color="primary" onClick={onClick}>
-      Connect
+  return (
+    <Button
+      style={{ position: 'fixed', bottom: '20px', right: '20px' }}
+      id="connect-button"
+      variant="round"
+      disabled={Boolean(port)}
+      color="primary"
+      onClick={onClick}
+    >
+      +
     </Button>
   )
 }
