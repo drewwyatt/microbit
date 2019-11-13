@@ -5,6 +5,8 @@ import CssBaseline from '@material-ui/core/CssBaseline'
 import Container from '@material-ui/core/Container'
 import SupportGuard from '../components/SupportGuard'
 import Unsupported from '../components/Unsupported'
+import SerialProvider from '../components/Serial'
+import ConnectButton from '../components/ConnectButton'
 
 const theme = createMuiTheme({
   palette: { background: { default: '#cec6bf' } },
@@ -36,7 +38,9 @@ const Home = () => (
         />
       </Head>
       <SupportGuard fallback={Unsupported}>
-        <p>hey</p>
+        <SerialProvider>
+          <ConnectButton />
+        </SerialProvider>
       </SupportGuard>
     </Container>
   </ThemeProvider>
