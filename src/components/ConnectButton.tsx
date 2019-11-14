@@ -1,5 +1,6 @@
 import React, { FC, useCallback } from 'react'
 import Button from '@material-ui/core/Fab'
+import Typography from '@material-ui/core/Typography'
 import { usePort } from './Serial'
 
 const ConnectButton: FC = () => {
@@ -25,7 +26,7 @@ const ConnectButton: FC = () => {
       color="primary"
       onClick={onClick}
     >
-      +
+      <Typography variant="h5">+</Typography>
     </Button>
   )
 }

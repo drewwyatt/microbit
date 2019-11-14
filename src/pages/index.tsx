@@ -10,7 +10,7 @@ import ConnectButton from '../components/ConnectButton'
 
 const theme = createMuiTheme({
   palette: {
-    background: { default: '#cec6bf' },
+    background: { default: '#34d4c6' },
     primary: { main: '#161517' },
     secondary: { main: '#cca4a7', contrastText: '#000' },
     error: { main: '#b00020' },
