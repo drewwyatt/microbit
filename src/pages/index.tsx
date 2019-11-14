@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { FC } from 'react'
 import dynamic from 'next/dynamic'
 import Head from 'next/head'
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles'
@@ -17,7 +17,22 @@ const theme = createMuiTheme({
   },
 })
 
-const LEDs = dynamic(() => import('../components/Grid'), { ssr: false })
+const Centerer: FC = ({ children }) => (
+  <div
+    style={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignContent: 'center',
+      alignItems: 'center',
+      width: '100vw',
+      height: '100vh',
+    }}
+  >
+    {children}
+  </div>
+)
+
+const LEDs = dynamic(() => import('../components/leds/Grid'), { ssr: false })
 
 const Home = () => (
   <ThemeProvider theme={theme}>
@@ -29,12 +44,14 @@ const Home = () => (
         href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
       />
     </Head>
-    <SupportGuard fallback={Unsupported}>
-      <SerialProvider>
-        <LEDs />
-        <ConnectButton />
-      </SerialProvider>
-    </SupportGuard>
+    <Centerer>
+      <SupportGuard fallback={Unsupported}>
+        <SerialProvider>
+          <LEDs />
+          <ConnectButton />
+        </SerialProvider>
+      </SupportGuard>
+    </Centerer>
   </ThemeProvider>
 )
 
