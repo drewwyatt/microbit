@@ -1,6 +1,6 @@
 import { useCallback, useReducer, Reducer } from 'react'
 import { LEDState, ScreenState } from '../../models'
-import { OFF } from './presets'
+import { OFF } from './presets/presets'
 
 const flip = (led: LEDState): LEDState => (led === 1 ? 0 : 1)
 
@@ -27,7 +27,7 @@ const useLEDs = () => {
     (...props: Parameters<typeof set>) => dispatch(set(...props)),
     [],
   )
-  return [state, _toggle, applyPreset] as const
+  return [state, [_toggle, applyPreset]] as const
 }
 
 export default useLEDs
