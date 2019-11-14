@@ -1,64 +1,58 @@
+import { ScreenState } from '../../models'
+
 // prettier-ignore
-export const V = [
+const V = [
   0, 1, 0, 1, 0,
   0, 1, 0, 1, 0,
   0, 1, 0, 1, 0,
   0, 1, 0, 1, 0,
   0, 0, 1, 0, 0,
-];
+] as const
 
 // prettier-ignore
-export const A = [
+const A = [
   0, 0, 1, 0, 0,
   0, 1, 0, 1, 0,
   0, 1, 1, 1, 0,
   0, 1, 0, 1, 0,
   0, 1, 0, 1, 0,
-];
+] as const
 
 // prettier-ignore
-export const N = [
+const N = [
   1, 0, 0, 0, 1,
   1, 1, 0, 0, 1,
   1, 0, 1, 0, 1,
   1, 0, 0, 1, 1,
   1, 0, 0, 0, 1,
-];
+] as const
 
 // prettier-ignore
-export const E = [
+const E = [
   0, 1, 1, 1, 0,
   0, 1, 0, 0, 0,
   0, 1, 1, 0, 0,
   0, 1, 0, 0, 0,
   0, 1, 1, 1, 0,
-];
+] as const
 
 // prettier-ignore
-export const S = [
+const S = [
   0, 1, 1, 1, 0,
   0, 1, 0, 0, 0,
   0, 1, 1, 1, 0,
   0, 0, 0, 1, 0,
   0, 1, 1, 1, 0,
-];
+] as const
 
 // prettier-ignore
-export const HEART = [
+const HEART = [
   0, 1, 0, 1, 0,
   1, 0, 1, 0, 1,
   0, 0, 0, 0, 0,
   0, 1, 0, 1, 0,
   0, 0, 1, 0, 0,
-];
+] as const
 
-enum Screen {
-  V = 'V',
-  A = 'A',
-  N = 'N',
-  E = 'E',
-  S = 'S',
-  Heart = 'HEART',
-}
-
-export default Screen
+const Presets: ScreenState[] = [V, A, N, E, S, S, A, HEART]
+export default Presets

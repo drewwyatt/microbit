@@ -1,3 +1,7 @@
+/**
+ * IO
+ */
+
 export type SerialOptions = {
   baudrate: number
 }
@@ -15,3 +19,36 @@ declare global {
     serial: Serial
   }
 }
+
+/**
+ * Screen
+ */
+
+export type LEDState = 1 | 0
+export type ScreenState = readonly [
+  LEDState,
+  LEDState,
+  LEDState,
+  LEDState,
+  LEDState,
+  LEDState,
+  LEDState,
+  LEDState,
+  LEDState,
+  LEDState,
+  LEDState,
+  LEDState,
+  LEDState,
+  LEDState,
+  LEDState,
+  LEDState,
+  LEDState,
+  LEDState,
+  LEDState,
+  LEDState,
+  LEDState,
+  LEDState,
+  LEDState,
+  LEDState,
+  LEDState,
+]
