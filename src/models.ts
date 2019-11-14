@@ -24,31 +24,8 @@ declare global {
  * Screen
  */
 
-export type LEDState = 1 | 0
-export type ScreenState = readonly [
-  LEDState,
-  LEDState,
-  LEDState,
-  LEDState,
-  LEDState,
-  LEDState,
-  LEDState,
-  LEDState,
-  LEDState,
-  LEDState,
-  LEDState,
-  LEDState,
-  LEDState,
-  LEDState,
-  LEDState,
-  LEDState,
-  LEDState,
-  LEDState,
-  LEDState,
-  LEDState,
-  LEDState,
-  LEDState,
-  LEDState,
-  LEDState,
-  LEDState,
-]
+export enum LEDState {
+  On = 1,
+  Off = 0,
+}
+export type ScreenState = readonly LEDState[]

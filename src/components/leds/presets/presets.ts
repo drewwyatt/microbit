@@ -1,4 +1,12 @@
-import { ScreenState } from '../../models'
+import { ScreenState } from '../../../models'
+
+// prettier-ignore
+export const OFF = [
+  0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0,
+] as const
 
 // prettier-ignore
 const V = [

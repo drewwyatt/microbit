@@ -1,8 +1,11 @@
 import React, { FC } from 'react'
 import Card from '@material-ui/core/Card'
 import Toggle from './toggle'
+import useLEDs from './useLEDs'
 
 const Grid: FC = () => {
+  const [LEDs, onToggle] = useLEDs()
+  console.log('state', LEDs)
   return (
     <Card
       raised
@@ -14,11 +17,9 @@ const Grid: FC = () => {
         gridTemplateColumns: 'repeat(5, 1fr)',
       }}
     >
-      {Array(25)
-        .fill(Toggle)
-        .map((C, idx) => (
-          <C key={idx} />
-        ))}
+      {LEDs.map((state, idx) => (
+        <Toggle id={idx} state={state} onToggle={onToggle} key={idx} />
+      ))}
     </Card>
   )
 }
