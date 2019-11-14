@@ -13,22 +13,28 @@ const Grid: FC = () => {
   }, [preset])
 
   return (
-    <Card
-      raised
-      color="main"
+    <div
       style={{
-        display: 'grid',
-        height: '270px',
+        position: 'relative',
         width: '400px',
-        gridTemplateColumns: 'repeat(5, 1fr)',
       }}
     >
-      {LEDs.map((state, idx) => (
-        <Toggle id={idx} state={state} onToggle={onToggle} key={idx} />
-      ))}
+      <Card
+        raised
+        color="main"
+        style={{
+          display: 'grid',
+          height: '270px',
+          gridTemplateColumns: 'repeat(5, 1fr)',
+        }}
+      >
+        {LEDs.map((state, idx) => (
+          <Toggle id={idx} state={state} onToggle={onToggle} key={idx} />
+        ))}
+      </Card>
       <PresetButton direction={CycleDirection.Backward} onClick={prevPreset} />
       <PresetButton direction={CycleDirection.Forward} onClick={nextPreset} />
-    </Card>
+    </div>
   )
 }
 
