@@ -8,6 +8,7 @@ export type SerialOptions = {
 
 export type SerialPort = {
   open(options: SerialOptions): Promise<void>
+  close(): Promise<void>
 }
 
 export type Serial = {

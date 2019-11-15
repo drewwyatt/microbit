@@ -1,20 +1,24 @@
 import React, { FC, useCallback } from 'react'
 import Button from '@material-ui/core/Fab'
 import Typography from '@material-ui/core/Typography'
-import { usePort } from './Serial'
+import { useDisconnect, usePort } from './serial'
 
 const ConnectButton: FC = () => {
+  const disconnect = useDisconnect()
   const [port, setPort] = usePort()
+
   const onClick = useCallback(() => {
-    if (!port) {
-      navigator.serial
-        .requestPort({})
-        .then(port => {
-          console.log('port!', port)
-          setPort(port)
-        })
-        .catch(e => console.error(e))
-    }
+    disconnect().then(() => {
+      if (!port) {
+        navigator.serial
+          .requestPort({})
+          .then(port => {
+            console.log('port!', port)
+            setPort(port)
+          })
+          .catch(e => console.error(e))
+      }
+    })
   }, [Boolean(port)])
 
   return (

@@ -5,7 +5,7 @@ import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import SupportGuard from '../components/SupportGuard'
 import Unsupported from '../components/Unsupported'
-import SerialProvider from '../components/Serial'
+import SerialProvider from '../components/serial'
 import ConnectButton from '../components/ConnectButton'
 
 const theme = createMuiTheme({
