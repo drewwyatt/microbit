@@ -7,6 +7,7 @@ type State = {
   inputDone?: Promise<void>
   outputStream?: WritableStream<any>
   outputDone?: Promise<void>
+  buttonCallbacks?: [() => void, () => void]
 }
 
 export const Context = createContext<[State, Dispatch<Action>]>(undefined)
@@ -37,3 +38,5 @@ export const setInputDone = set('inputDone')
 export const setOutputStream = set('outputStream')
 
 export const setOutputDone = set('outputDone')
+
+export const setCallbacks = set('buttonCallbacks')

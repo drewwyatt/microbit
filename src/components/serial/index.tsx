@@ -1,5 +1,7 @@
-import React, { FC, useContext, useReducer, useCallback, useEffect } from 'react'
+import React, { FC, useContext, useReducer, useCallback, useEffect, useRef } from 'react'
 import { SerialPort } from '../../models'
+import JSONTransformer from '../transforms/jsontransformer'
+import LineBreakTransformer from '../transforms/linebreaktranformer'
 import {
   Context,
   reducer,
@@ -8,6 +10,7 @@ import {
   setInputStream,
   setOutputDone,
   setOutputStream,
+  setCallbacks,
 } from './state'
 
 const SerialProvider: FC = ({ children }) => (
@@ -30,12 +33,37 @@ export const usePort = () => {
 }
 
 export const useInputStream = () => {
-  const [{ inputStream, inputDone, port }, dispatch] = useContext(Context)
+  const [{ inputStream, inputDone, port, buttonCallbacks }, dispatch] = useContext(
+    Context,
+  )
+
+  const cb1 = useRef(() => {})
+  const cb2 = useRef(() => {})
+
+  useEffect(() => {
+    if (buttonCallbacks && buttonCallbacks[0]) {
+      console.log('setting cb1')
+      cb1.current = buttonCallbacks[0]
+    }
+    if (buttonCallbacks && buttonCallbacks[1]) {
+      console.log('setting cb2')
+      cb2.current = buttonCallbacks[1]
+    }
+  }, [buttonCallbacks])
+
   const readLoop = useCallback(async (reader: ReadableStreamDefaultReader) => {
     while (true) {
       const { value, done } = await reader.read()
       if (value) {
         console.log(value)
+        if (value.button) {
+          console.log('button', value.button)
+          if (value.button === 'BTN1') {
+            cb1.current()
+          } else {
+            cb2.current()
+          }
+        }
       }
 
       if (done) {
@@ -46,13 +74,20 @@ export const useInputStream = () => {
     }
   }, [])
 
-  const init = useCallback((port: ReturnType<typeof usePort>[0]) => {
-    const decoder = new TextDecoderStream()
-    dispatch(setInputDone(port.readable.pipeTo(decoder.writable)))
-    const reader = decoder.readable.getReader()
-    dispatch(setInputStream(reader))
-    readLoop(reader)
-  }, [])
+  const init = useCallback(
+    (port: ReturnType<typeof usePort>[0]) => {
+      const decoder = new TextDecoderStream()
+      dispatch(setInputDone(port.readable.pipeTo(decoder.writable)))
+      const reader = decoder.readable
+        .pipeThrough(new TransformStream(new LineBreakTransformer() as any))
+        .pipeThrough(new TransformStream(new JSONTransformer() as any))
+        .getReader()
+
+      dispatch(setInputStream(reader as any))
+      readLoop(reader as any)
+    },
+    [readLoop],
+  )
 
   useEffect(() => {
     if (port && !inputStream && !inputDone) {
@@ -102,13 +137,26 @@ export const useOutputStream = () => {
   return writeToStream
 }
 
-export const useStream = () => {
-  const [port] = usePort()
+export const useButtons = (
+  write: ReturnType<typeof useOutputStream>,
+  cb1: () => void,
+  cb2: () => void,
+) => {
+  const [, dispatch] = useContext(Context)
+  const cmd = (btnId: string) => `
+    setWatch(function(e) {
+      print('{"button": "${btnId}", "pressed": ' + e.state + '}');
+    }, ${btnId}, {repeat:true, debounce:20, edge:"both"});
+  `
 
   useEffect(() => {
-    if (port) {
-    }
-  }, [[!!port]])
+    write(cmd('BTN1'), cmd('BTN2'))
+  }, [write])
+
+  useEffect(() => {
+    console.log('setting callbacks...')
+    dispatch(setCallbacks([cb1, cb2]))
+  }, [cb1, cb2])
 }
 
 export const useDisconnect = () => {

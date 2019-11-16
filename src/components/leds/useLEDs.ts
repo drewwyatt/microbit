@@ -1,7 +1,7 @@
 import { useCallback, useReducer, Reducer, useEffect } from 'react'
 import { LEDState, ScreenState } from '../../models'
+import { useOutputStream, useButtons } from '../serial'
 import { OFF } from './presets/presets'
-import { useOutputStream } from '../serial'
 
 const flip = (led: LEDState): LEDState => (led === 1 ? 0 : 1)
 
@@ -18,9 +18,10 @@ const reducer: Reducer<ScreenState, Action> = (state, action) => {
   }
 }
 
-const useLEDs = () => {
+const useLEDs = (prev: () => void, next: () => void) => {
   const [state, dispatch] = useReducer(reducer, OFF)
   const writeToStream = useOutputStream()
+  useButtons(writeToStream, prev, next)
 
   useEffect(() => {
     const clone = [...state]
