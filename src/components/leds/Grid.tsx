@@ -1,6 +1,7 @@
 import React, { FC, useEffect } from 'react'
 import Card from '@material-ui/core/Card'
 import presets, { CycleDirection, PresetButton, usePresets } from './presets'
+import { useOutputStream } from '../serial'
 import Toggle from './toggle'
 import useLEDs from './useLEDs'
 

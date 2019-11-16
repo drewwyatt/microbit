@@ -1,12 +1,12 @@
 import React, { FC, useCallback } from 'react'
 import Button from '@material-ui/core/Fab'
 import Typography from '@material-ui/core/Typography'
-import { useDisconnect, useInputStream, usePort } from './serial'
+import { useDisconnect, useInputStream, usePort, useOutputStream } from './serial'
 
 const ConnectButton: FC = () => {
   const disconnect = useDisconnect()
   const [port, setPort] = usePort()
-  const [, initInputStream] = useInputStream()
+  useInputStream()
 
   const onClick = useCallback(async () => {
     try {

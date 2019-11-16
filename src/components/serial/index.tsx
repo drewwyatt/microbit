@@ -1,6 +1,14 @@
 import React, { FC, useContext, useReducer, useCallback, useEffect } from 'react'
 import { SerialPort } from '../../models'
-import { Context, reducer, setPort, setInputDone, setInputStream } from './state'
+import {
+  Context,
+  reducer,
+  setPort,
+  setInputDone,
+  setInputStream,
+  setOutputDone,
+  setOutputStream,
+} from './state'
 
 const SerialProvider: FC = ({ children }) => (
   <Context.Provider value={useReducer(reducer, {})}>{children}</Context.Provider>
@@ -47,15 +55,52 @@ export const useInputStream = () => {
   }, [])
 
   useEffect(() => {
-    if (port) {
+    if (port && !inputStream && !inputDone) {
+      console.log('init read')
       init(port)
     }
-  }, [!!port])
+  }, [!!port, !!inputStream, !!inputDone])
 
   return [inputStream, inputDone] as const
 }
 
-export const useOutputStream = () => {}
+export const useOutputStream = () => {
+  const [{ inputStream, outputDone, outputStream, port }, dispatch] = useContext(Context)
+
+  const write = (stream: typeof outputStream, ...lines: string[]) => {
+    const writer = stream.getWriter()
+    lines.forEach(line => {
+      console.log('[SEND]', line)
+      writer.write(line + '\n')
+    })
+    writer.releaseLock()
+  }
+
+  const writeToStream = useCallback(
+    (...lines: string[]) => {
+      if (outputStream) {
+        write(outputStream, ...lines)
+      }
+    },
+    [!!outputStream],
+  )
+
+  const init = useCallback((port: ReturnType<typeof usePort>[0]) => {
+    const encoder = new TextEncoderStream()
+    write(encoder.writable, '\x03', 'echo(false);')
+    dispatch(setOutputDone(encoder.readable.pipeTo(port.writable)))
+    dispatch(setOutputStream(encoder.writable))
+  }, [])
+
+  useEffect(() => {
+    if (port && inputStream && !outputStream && !outputDone) {
+      console.log('init write')
+      init(port)
+    }
+  }, [!!port, !!outputDone, !!outputStream, !!inputStream])
+
+  return writeToStream
+}
 
 export const useStream = () => {
   const [port] = usePort()

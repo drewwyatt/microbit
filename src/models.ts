@@ -10,6 +10,7 @@ export type SerialPort = {
   open(options: SerialOptions): Promise<void>
   close(): Promise<void>
   readable: ReadableStream<any>
+  writable: WritableStream<any>
 }
 
 export type Serial = {
@@ -19,6 +20,10 @@ export type Serial = {
 declare global {
   interface Navigator {
     serial: Serial
+  }
+
+  interface ReadonlyArray<T> {
+    reverse(): T[]
   }
 }
 
