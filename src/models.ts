@@ -9,10 +9,11 @@ export type SerialOptions = {
 export type SerialPort = {
   open(options: SerialOptions): Promise<void>
   close(): Promise<void>
+  readable: ReadableStream<any>
 }
 
 export type Serial = {
-  requestPort(options: object): Promise<SerialPort>
+  requestPort(): Promise<SerialPort>
 }
 
 declare global {
